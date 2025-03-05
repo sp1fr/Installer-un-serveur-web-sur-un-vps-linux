@@ -1,19 +1,59 @@
-apt-get update (recherche des mises a jour)
+Pour installer Apache et MariaDB sur votre serveur, voici les étapes générales pour un système basé sur Debian ou Ubuntu. Si vous utilisez une autre distribution Linux, les commandes peuvent légèrement varier, mais l'idée générale reste la même.
 
-apt-get upgrade (installation des mises à jour)
+1. Mise à jour des packages
+Avant de commencer l'installation, assurez-vous que votre système est à jour.
 
-apt-get install apache2 (installation de apache2)
+- sudo apt update
+- sudo apt upgrade
 
-apt install libapache2-mod-php (installation de php)
+2. Installation d'Apache
+Apache est un serveur web populaire. Pour l'installer :
 
-nano /var/www/html/info.php (création du fichier info.php pour tester si php est bien installé sur la machine)
+- sudo apt install apache2
 
-apt-get install mysql-server (installation de mysql)
+3. Vérification du service Apache
+Après l'installation, vous pouvez vérifier si Apache fonctionne en accédant à l'adresse IP de votre serveur ou en utilisant localhost dans votre navigateur. Vous devriez voir une page par défaut d'Apache.
 
-sudo mysql -u root (On accède à l'utilisateur root dans MySQL pour lui créer un mot de passe (Voir la suite des commandes ci-après))
+Pour vérifier si Apache est en cours d'exécution, utilisez la commande :
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'le_mot_de_pass_choisi';
-FLUSH PRIVILEGES;
-QUIT;
+- sudo systemctl status apache2
 
-apt-get install phpmyadmin (installation de phpmyadmin)
+Si Apache n'est pas encore démarré, lancez-le avec :
+
+- sudo systemctl start apache2
+
+4. Installation de MariaDB
+MariaDB est un système de gestion de base de données relationnelle (SGBD), un fork de MySQL. Pour installer MariaDB :
+
+- sudo apt install mariadb-server
+
+5. Sécurisation de MariaDB
+Après l'installation, il est recommandé de sécuriser MariaDB en exécutant le script de sécurisation :
+
+- sudo mysql_secure_installation
+
+Ce script vous posera quelques questions pour configurer MariaDB, telles que :
+
+Changer le mot de passe root de MariaDB
+Supprimer les utilisateurs anonymes
+Désactiver l'accès root à distance
+Supprimer la base de données de test
+Répondez à ces questions selon vos préférences de sécurité.
+
+6. Vérification de MariaDB
+Vous pouvez vérifier si MariaDB fonctionne correctement en accédant à la console MariaDB :
+
+- sudo mysql
+Si vous avez réussi à vous connecter, vous êtes prêt à utiliser MariaDB.
+
+7. Configuration de l’accès distant (optionnel)
+Si vous souhaitez accéder à Apache ou MariaDB à partir d'un autre serveur, assurez-vous que vos règles de pare-feu permettent l'accès au port 80 (pour Apache) et au port 3306 (pour MariaDB). Par exemple, pour ouvrir ces ports avec ufw :
+
+
+- sudo ufw allow 80/tcp
+- sudo ufw allow 3306/tcp
+
+8. Vérification du pare-feu (optionnel)
+Si vous avez activé ufw sur votre serveur, vous pouvez vérifier les règles en place avec :
+
+sudo ufw status
